@@ -1,0 +1,1800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All In One Tools - Functional</title>
+    <style>
+        /* Basic Reset & Body Styling */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5; /* Light gray background */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            color: #333;
+        }
+
+        /* Promotional Text Styling */
+        .promo-text {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .promo-text h1 {
+            font-size: 2.2em;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .promo-text p {
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        /* App Container Styling */
+        .app-container {
+            width: 100%;
+            max-width: 400px;
+            background-color: #ffffff;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 90px); /* Adjust height */
+            border: 1px solid #e0e0e0;
+            position: relative; /* Needed for modals */
+        }
+
+        /* App Header Styling */
+        .app-header {
+            background-color: #008080;
+            color: white;
+            padding: 15px 20px;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+            flex-shrink: 0; /* Prevent header from shrinking */
+        }
+
+         .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .header-logo-title {
+             display: flex;
+             align-items: center;
+        }
+
+         .header-logo-title .logo {
+            font-size: 1.7em;
+            font-weight: bold;
+            margin-right: 8px;
+            color: #ff4500;
+            background-color: white;
+            border-radius: 5px;
+            padding: 0 5px;
+            line-height: 1;
+         }
+
+        .header-logo-title h2 {
+            font-size: 1.2em;
+            font-weight: normal;
+        }
+
+        .header-menu {
+            font-size: 1.8em;
+            cursor: pointer;
+        }
+
+        .welcome-text {
+            font-size: 0.85em;
+            color: #e0e0e0;
+            margin-bottom: 10px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 0.9em;
+        }
+
+        .search-bar input::placeholder {
+            color: #d0d0d0;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background-color: #f8f9fa;
+        }
+
+        .tools-section-title {
+            font-size: 1.0em;
+            color: #555;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        /* Tools Grid Styling */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .tool-item {
+            background-color: #ffffff;
+            border-radius: 15px;
+            padding: 8px 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 85px;
+            position: relative; /* For potential badges */
+        }
+
+        .tool-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .tool-item .icon {
+            font-size: 1.8em;
+            margin-bottom: 6px;
+            color: #008080;
+        }
+
+        .tool-item p {
+            font-size: 0.7em;
+            color: #333;
+            line-height: 1.1;
+        }
+
+        /* Modal Styling */
+        .tool-modal {
+            display: none; /* Hidden by default */
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.98);
+            z-index: 100;
+            padding: 20px;
+            overflow-y: auto;
+            flex-direction: column;
+        }
+
+        .tool-modal.active {
+            display: flex; /* Show when active */
+        }
+
+        .tool-modal h3 {
+            margin-bottom: 15px;
+            color: #008080;
+            text-align: center;
+        }
+         .tool-modal .modal-content {
+             flex-grow: 1;
+             overflow-y: auto;
+             margin-bottom: 10px;
+         }
+
+        .tool-modal button.close-modal {
+            background-color: #ff4500;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            align-self: center; /* Center the close button */
+        }
+        .tool-modal button {
+             background-color: #008080;
+             color: white;
+             border: none;
+             padding: 8px 12px;
+             border-radius: 5px;
+             cursor: pointer;
+             margin: 5px;
+        }
+        .tool-modal input, .tool-modal textarea, .tool-modal select {
+             width: 95%;
+             padding: 8px;
+             margin-bottom: 10px;
+             border: 1px solid #ccc;
+             border-radius: 4px;
+        }
+         .tool-modal label {
+             display: block;
+             margin-bottom: 5px;
+             font-weight: bold;
+             font-size: 0.9em;
+         }
+         .tool-modal pre, .tool-modal div#output, .tool-modal div#result {
+             background-color: #eee;
+             padding: 10px;
+             border-radius: 5px;
+             min-height: 40px;
+             white-space: pre-wrap;
+             word-wrap: break-word;
+             font-size: 0.9em;
+             margin-top: 10px;
+         }
+          #qrCodeOutput {
+              margin-top: 15px;
+              text-align: center;
+          }
+           #qrCodeOutput img {
+               max-width: 150px;
+               max-height: 150px;
+               margin: 10px auto;
+               display: block;
+           }
+           #paintCanvas {
+                border: 1px solid #000;
+                cursor: crosshair;
+                touch-action: none; /* Prevent scrolling on canvas touch */
+                max-width: 100%;
+           }
+           .paint-controls {
+               margin-bottom: 10px;
+               text-align: center;
+           }
+           .paint-controls input[type="color"] {
+               height: 30px;
+               padding: 0 2px;
+               vertical-align: middle;
+           }
+            .paint-controls input[type="range"] {
+               vertical-align: middle;
+            }
+           #musicPlayer audio {
+               width: 100%;
+               margin-top: 10px;
+           }
+            #speechToTextOutput { min-height: 60px; }
+            #billingItems { margin-bottom: 10px;}
+            .billing-item { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9em;}
+            #billingTotal { font-weight: bold; margin-top: 10px; border-top: 1px solid #ccc; padding-top: 5px; }
+
+        /* Helper class for search filtering */
+        .hidden {
+            display: none;
+        }
+
+        /* Specific Icon Placeholders */
+        /* Using text symbols - replace with actual icons if possible */
+        .icon-billing:before { content: '🧾'; }
+        .icon-days:before { content: '🎂'; }
+        .icon-unit:before { content: '🔄'; }
+        .icon-stopwatch:before { content: '⏱️'; }
+        .icon-timer:before { content: '⏳'; }
+        .icon-number:before { content: '🔢'; }
+        .icon-random:before { content: '🎲'; }
+        .icon-qr:before { content: '█║'; }
+        .icon-morse:before { content: '💬'; }
+        .icon-calc:before { content: '🧮'; }
+        .icon-info:before { content: 'ℹ️'; }
+        .icon-compass:before { content: '🧭'; }
+        .icon-leveler:before { content: '📐'; }
+        .icon-speed:before { content: '💨'; }
+        .icon-altitude:before { content: '⛰️'; }
+        .icon-reminder:before { content: '📝'; }
+        .icon-address:before { content: '📍'; }
+        .icon-paint:before { content: '🖌️'; }
+        .icon-mike:before { content: '🎤'; }
+        .icon-sound-gen:before { content: '🎵'; }
+        .icon-tts:before { content: '🗣️'; }
+        .icon-stt:before { content: '✍️'; }
+        .icon-music-player:before { content: '🎧'; }
+        .icon-vibro:before { content: '〰️'; }
+        .icon-sound-int:before { content: '🔊'; }
+        .icon-gmeter:before { content: '✈️'; }
+        .icon-ruler:before { content: '📏'; }
+        .icon-protractor:before { content: ' M '; } /* Placeholder */
+        .icon-screen-rec:before { content: '⏺️'; }
+        /* Removed icons for non-functional tools */
+
+    </style>
+    <!-- QR Code Library (jsQR derivative or similar small lib) -->
+    <!-- Using a popular CDN for qrcode.min.js -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+    <div class="promo-text">
+        <h1>Best Tools</h1>
+        <p>Also works Offline (most tools)</p>
+    </div>
+
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-top">
+                <div class="header-logo-title">
+                   <span class="logo">A</span>
+                   <h2>All tools</h2>
+                </div>
+                <div class="header-menu" onclick="alert('Menu clicked!')">⋮</div>
+            </div>
+            <div class="welcome-text">Welcome to all tools.</div>
+            <div class="search-bar">
+                <input type="search" id="searchInput" placeholder="Search for tools..">
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="tools-section-title">Available Tools</div>
+            <div class="tools-grid" id="toolsGrid">
+
+                <!-- Functional or Partially Functional Tools -->
+                <div class="tool-item" data-name="Calculator" data-tool="calculator">
+                    <div class="icon icon-calc"></div><p>Calculator</p>
+                </div>
+                 <div class="tool-item" data-name="Unit Converter" data-tool="unitConverter">
+                    <div class="icon icon-unit"></div><p>Unit Converter</p>
+                </div>
+                 <div class="tool-item" data-name="Days Counter" data-tool="daysCounter">
+                    <div class="icon icon-days"></div><p>Days Counter</p>
+                </div>
+                <div class="tool-item" data-name="Stopwatch" data-tool="stopwatch">
+                    <div class="icon icon-stopwatch"></div><p>Stopwatch</p>
+                </div>
+                <div class="tool-item" data-name="Timer" data-tool="timer">
+                    <div class="icon icon-timer"></div><p>Timer</p>
+                </div>
+                 <div class="tool-item" data-name="Number Counter" data-tool="numberCounter">
+                    <div class="icon icon-number"></div><p>Number Counter</p>
+                </div>
+                 <div class="tool-item" data-name="Random Generator" data-tool="randomGenerator">
+                    <div class="icon icon-random"></div><p>Random</p>
+                </div>
+                 <div class="tool-item" data-name="Generate QR Code" data-tool="generateQr">
+                    <div class="icon icon-qr"></div><p>Generate QR</p>
+                </div>
+                 <div class="tool-item" data-name="Morse code" data-tool="morseCode">
+                    <div class="icon icon-morse"></div><p>Morse code</p>
+                </div>
+                 <div class="tool-item" data-name="Text to Speech" data-tool="textToSpeech">
+                    <div class="icon icon-tts"></div><p>Text to Speech</p>
+                </div>
+                 <div class="tool-item" data-name="Speech to Text" data-tool="speechToText">
+                    <div class="icon icon-stt"></div><p>Speech to Text</p>
+                </div>
+                 <div class="tool-item" data-name="Paint" data-tool="paint">
+                    <div class="icon icon-paint"></div><p>Paint</p>
+                </div>
+                 <div class="tool-item" data-name="Sound generator" data-tool="soundGenerator">
+                    <div class="icon icon-sound-gen"></div><p>Sound generator</p>
+                </div>
+                 <div class="tool-item" data-name="Music player" data-tool="musicPlayer">
+                     <div class="icon icon-music-player"></div><p>Music player</p>
+                 </div>
+                 <div class="tool-item" data-name="Reminders" data-tool="reminders">
+                     <div class="icon icon-reminder"></div><p>Reminders</p>
+                 </div>
+                 <div class="tool-item" data-name="Billing system" data-tool="billingSystem">
+                     <div class="icon icon-billing"></div><p>Billing system</p>
+                 </div>
+                 <div class="tool-item" data-name="Ruler" data-tool="ruler">
+                     <div class="icon icon-ruler"></div><p>Ruler</p>
+                 </div>
+                 <div class="tool-item" data-name="My Address" data-tool="myAddress">
+                    <div class="icon icon-address"></div><p>My Address</p>
+                </div>
+                <div class="tool-item" data-name="Compass" data-tool="compass">
+                    <div class="icon icon-compass"></div><p>Compass</p>
+                </div>
+                <div class="tool-item" data-name="Leveler" data-tool="leveler">
+                    <div class="icon icon-leveler"></div><p>Leveler</p>
+                </div>
+                 <div class="tool-item" data-name="Speedometer" data-tool="speedometer">
+                    <div class="icon icon-speed"></div><p>Speedometer</p>
+                </div>
+                 <div class="tool-item" data-name="Altitude" data-tool="altitude">
+                     <div class="icon icon-altitude"></div><p>Altitude</p>
+                 </div>
+                  <div class="tool-item" data-name="Vibrometer Motion" data-tool="vibrometer">
+                    <div class="icon icon-vibro"></div><p>Vibro / Motion</p>
+                </div>
+                 <div class="tool-item" data-name="Sound Intensity" data-tool="soundIntensity">
+                    <div class="icon icon-sound-int"></div><p>Sound Intensity</p>
+                </div>
+                 <div class="tool-item" data-name="G Meter" data-tool="gMeter">
+                    <div class="icon icon-gmeter"></div><p>G Meter</p>
+                </div>
+                 <div class="tool-item" data-name="Protractor Orientation" data-tool="protractor">
+                     <div class="icon icon-protractor"></div><p>Protractor</p>
+                 </div>
+                 <div class="tool-item" data-name="Screen Recorder" data-tool="screenRecorder">
+                     <div class="icon icon-screen-rec"></div><p>Screen Recorder</p>
+                 </div>
+                 <div class="tool-item" data-name="Mike" data-tool="mike">
+                    <div class="icon icon-mike"></div><p>Mike</p>
+                </div>
+                 <div class="tool-item" data-name="Device Info" data-tool="deviceInfo">
+                    <div class="icon icon-info"></div><p>Device Info</p>
+                </div>
+                 <!-- Add other potentially functional tools here -->
+
+            </div>
+        </main>
+
+        <!-- Tool Modals Container -->
+        <div id="modalsContainer">
+            <!-- Modals will be injected here by JavaScript -->
+        </div>
+
+    </div>
+
+    <script>
+        // --- QR Code Library Embedded (Placeholder - using CDN above) ---
+        // If not using CDN, you'd paste the minified library code here.
+        // Example: var QRCode = function(){ /* ... library code ... */ }();
+
+        // --- Tool Implementation ---
+        const tools = {
+            // --- Basic Tools ---
+            calculator: {
+                name: "Calculator",
+                init: function(modalContent) {
+                    modalContent.innerHTML = `
+                        <input type="text" id="calcDisplay" style="text-align: right; font-size: 1.2em; margin-bottom: 10px;" disabled>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;">
+                            <button onclick="appendToCalc('7')">7</button> <button onclick="appendToCalc('8')">8</button> <button onclick="appendToCalc('9')">9</button> <button onclick="calcOperation('/')">/</button>
+                            <button onclick="appendToCalc('4')">4</button> <button onclick="appendToCalc('5')">5</button> <button onclick="appendToCalc('6')">6</button> <button onclick="calcOperation('*')">*</button>
+                            <button onclick="appendToCalc('1')">1</button> <button onclick="appendToCalc('2')">2</button> <button onclick="appendToCalc('3')">3</button> <button onclick="calcOperation('-')">-</button>
+                            <button onclick="appendToCalc('0')">0</button> <button onclick="appendToCalc('.')">.</button> <button onclick="calculateResult()">=</button> <button onclick="calcOperation('+')">+</button>
+                            <button onclick="clearCalc()" style="grid-column: span 4;">C</button>
+                        </div>
+                    `;
+                    this.display = modalContent.querySelector('#calcDisplay');
+                    this.currentInput = '';
+                    this.operator = null;
+                    this.firstOperand = null;
+                },
+                display: null, currentInput: '', operator: null, firstOperand: null
+            },
+            unitConverter: {
+                name: "Unit Converter",
+                init: function(modalContent) { /* Complex UI - Placeholder */
+                     modalContent.innerHTML = `<p>Unit Converter functionality requires a more complex UI and logic - not fully implemented here.</p>
+                     <label for="ucValue">Value:</label><input type="number" id="ucValue" placeholder="Enter value">
+                     <label for="ucFrom">From:</label><select id="ucFrom"><option>Meter</option><option>Kilometer</option><option>Feet</option></select>
+                     <label for="ucTo">To:</label><select id="ucTo"><option>Meter</option><option>Kilometer</option><option>Feet</option></select>
+                     <button onclick="alert('Conversion logic not implemented')">Convert</button>
+                     <div id="ucResult">Result: </div>`;
+                 }
+            },
+             daysCounter: {
+                name: "Days Counter",
+                init: function(modalContent) {
+                    modalContent.innerHTML = `
+                        <label for="dcDate1">Start Date:</label><input type="date" id="dcDate1">
+                        <label for="dcDate2">End Date:</label><input type="date" id="dcDate2">
+                        <button onclick="calculateDays()">Calculate Difference</button>
+                        <div id="dcResult"></div>
+                    `;
+                 }
+            },
+            stopwatch: {
+                name: "Stopwatch",
+                init: function(modalContent) {
+                     modalContent.innerHTML = `
+                         <div id="stopwatchDisplay" style="font-size: 2em; text-align: center; margin-bottom: 15px;">00:00:00.0</div>
+                         <div style="text-align: center;">
+                             <button id="swStartBtn">Start</button>
+                             <button id="swStopBtn" disabled>Stop</button>
+                             <button id="swResetBtn" disabled>Reset</button>
+                         </div>
+                     `;
+                     this.display = modalContent.querySelector('#stopwatchDisplay');
+                     this.startBtn = modalContent.querySelector('#swStartBtn');
+                     this.stopBtn = modalContent.querySelector('#swStopBtn');
+                     this.resetBtn = modalContent.querySelector('#swResetBtn');
+                     this.interval = null;
+                     this.startTime = 0;
+                     this.elapsedTime = 0;
+
+                     this.startBtn.onclick = () => this.start();
+                     this.stopBtn.onclick = () => this.stop();
+                     this.resetBtn.onclick = () => this.reset();
+                 },
+                 display: null, startBtn: null, stopBtn: null, resetBtn: null, interval: null, startTime: 0, elapsedTime: 0,
+                 start: function() {
+                     if (!this.interval) {
+                         this.startTime = Date.now() - this.elapsedTime;
+                         this.interval = setInterval(() => this.update(), 100); // Update every 100ms
+                         this.startBtn.disabled = true;
+                         this.stopBtn.disabled = false;
+                         this.resetBtn.disabled = true;
+                     }
+                 },
+                 stop: function() {
+                     if (this.interval) {
+                         clearInterval(this.interval);
+                         this.interval = null;
+                         this.elapsedTime = Date.now() - this.startTime;
+                         this.startBtn.disabled = false;
+                         this.stopBtn.disabled = true;
+                         this.resetBtn.disabled = false;
+                     }
+                 },
+                 reset: function() {
+                     this.stop();
+                     this.elapsedTime = 0;
+                     this.display.textContent = '00:00:00.0';
+                      this.resetBtn.disabled = true;
+                 },
+                 update: function() {
+                      const currentTime = Date.now();
+                      const time = currentTime - this.startTime;
+                      const ms = Math.floor((time % 1000) / 100);
+                      const secs = Math.floor((time / 1000) % 60);
+                      const mins = Math.floor((time / (1000 * 60)) % 60);
+                      const hrs = Math.floor(time / (1000 * 60 * 60));
+                      this.display.textContent = `${String(hrs).padStart(2,'0')}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}.${ms}`;
+                 }
+            },
+             timer: {
+                 name: "Timer",
+                 init: function(modalContent) {
+                     modalContent.innerHTML = `
+                        <label for="timerInput">Set Time (seconds):</label>
+                        <input type="number" id="timerInput" min="1" value="60">
+                        <div id="timerDisplay" style="font-size: 2em; text-align: center; margin: 15px 0;">01:00</div>
+                         <div style="text-align: center;">
+                            <button id="timerStartBtn">Start</button>
+                            <button id="timerStopBtn" disabled>Stop</button>
+                            <button id="timerResetBtn">Reset</button>
+                        </div>`;
+                     // Basic timer logic - needs implementation for start/stop/reset/display update/alarm
+                      modalContent.querySelector('#timerStartBtn').onclick = () => alert('Timer logic not fully implemented.');
+                 }
+            },
+             numberCounter: {
+                 name: "Number Counter",
+                 init: function(modalContent) {
+                     modalContent.innerHTML = `
+                         <div id="counterDisplay" style="font-size: 2.5em; text-align: center; margin: 20px 0;">0</div>
+                         <div style="text-align: center;">
+                             <button id="counterIncBtn" style="padding: 10px 20px; font-size: 1.2em;">+</button>
+                             <button id="counterDecBtn" style="padding: 10px 20px; font-size: 1.2em;">-</button>
+                             <button id="counterResetBtn">Reset</button>
+                         </div>`;
+                     let count = 0;
+                     const display = modalContent.querySelector('#counterDisplay');
+                     modalContent.querySelector('#counterIncBtn').onclick = () => display.textContent = ++count;
+                     modalContent.querySelector('#counterDecBtn').onclick = () => display.textContent = --count;
+                     modalContent.querySelector('#counterResetBtn').onclick = () => { count = 0; display.textContent = count; };
+                 }
+            },
+             randomGenerator: {
+                 name: "Random Generator",
+                 init: function(modalContent) {
+                     modalContent.innerHTML = `
+                         <label for="randMin">Min:</label><input type="number" id="randMin" value="1">
+                         <label for="randMax">Max:</label><input type="number" id="randMax" value="100">
+                         <button onclick="generateRandom()">Generate Number</button>
+                         <div id="randResult" style="font-size: 1.5em; margin-top: 15px;"></div>
+                     `;
+                 }
+            },
+             generateQr: {
+                name: "Generate QR Code",
+                init: function(modalContent) {
+                     modalContent.innerHTML = `
+                         <label for="qrTextInput">Text or URL:</label>
+                         <textarea id="qrTextInput" rows="3" placeholder="Enter text to encode..."></textarea>
+                         <button onclick="generateQRCode()">Generate QR Code</button>
+                         <div id="qrCodeOutput"></div>
+                         <p style="font-size: 0.8em; color: #666; margin-top: 10px;">Uses qrcode.js library.</p>
+                     `;
+                     this.outputDiv = modalContent.querySelector('#qrCodeOutput');
+                 },
+                 outputDiv: null
+            },
+             morseCode: {
+                 name: "Morse Code Converter",
+                 init: function(modalContent) {
+                     modalContent.innerHTML = `
+                         <label for="morseInput">Text:</label>
+                         <textarea id="morseInput" rows="3" placeholder="Enter text..."></textarea>
+                         <button onclick="convertToMorse()">Convert to Morse</button>
+                         <label for="morseOutput">Morse Code:</label>
+                         <textarea id="morseOutput" rows="3" readonly></textarea>
+                     `;
+                 }
+            },
+             textToSpeech: {
+                 name: "Text to Speech",
+                 init: function(modalContent) {
+                     modalContent.innerHTML = `
+                         <label for="ttsInput">Text to Speak:</label>
+                         <textarea id="ttsInput" rows="4" placeholder="Enter text..."></textarea>
+                         <button id="ttsSpeakBtn">Speak</button>
+                         <p style="font-size: 0.8em; color: #666; margin-top: 10px;">Uses browser's built-in speech synthesis.</p>
+                     `;
+                     modalContent.querySelector('#ttsSpeakBtn').onclick = () => {
+                         const text = modalContent.querySelector('#ttsInput').value;
+                         if ('speechSynthesis' in window && text) {
+                             const utterance = new SpeechSynthesisUtterance(text);
+                             window.speechSynthesis.speak(utterance);
+                         } else {
+                             alert('Speech Synthesis not supported or no text entered.');
+                         }
+                     };
+                 }
+            },
+            speechToText: {
+                name: "Speech to Text",
+                init: function(modalContent) {
+                     modalContent.innerHTML = `
+                         <button id="sttRecordBtn">Start Recording</button>
+                         <button id="sttStopBtn" disabled>Stop Recording</button>
+                         <label for="sttOutput">Recognized Text:</label>
+                         <textarea id="sttOutput" rows="4" readonly></textarea>
+                         <p style="font-size: 0.8em; color: #666; margin-top: 10px;">Uses browser's Web Speech API (requires permission, may need internet).</p>
+                     `;
+                     this.recognition = null;
+                     this.outputArea = modalContent.querySelector('#sttOutput');
+                     this.startBtn = modalContent.querySelector('#sttRecordBtn');
+                     this.stopBtn = modalContent.querySelector('#sttStopBtn');
+
+                     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                         this.recognition = new SpeechRecognition();
+                         this.recognition.continuous = true; // Keep listening
+                         this.recognition.interimResults = true; // Show results as they come
+
+                         this.recognition.onresult = (event) => {
+                             let interim_transcript = '';
+                             let final_transcript = '';
+                             for (let i = event.resultIndex; i < event.results.length; ++i) {
+                                 if (event.results[i].isFinal) {
+                                     final_transcript += event.results[i][0].transcript;
+                                 } else {
+                                     interim_transcript += event.results[i][0].transcript;
+                                 }
+                             }
+                             this.outputArea.value = final_transcript + interim_transcript;
+                         };
+                         this.recognition.onerror = (event) => { alert('Speech recognition error: ' + event.error); this.stopRec(); };
+                         this.recognition.onend = () => { this.stopRec(); }; // Ensure buttons reset if stopped automatically
+
+                         this.startBtn.onclick = () => this.startRec();
+                         this.stopBtn.onclick = () => this.stopRec();
+
+                     } else {
+                         modalContent.innerHTML = "<p>Speech Recognition API not supported in this browser.</p>";
+                     }
+                 },
+                 outputArea: null, startBtn: null, stopBtn: null, recognition: null,
+                 startRec: function() {
+                     if (this.recognition) {
+                         this.outputArea.value = '';
+                         this.recognition.start();
+                         this.startBtn.disabled = true;
+                         this.stopBtn.disabled = false;
+                     }
+                 },
+                 stopRec: function() {
+                      if (this.recognition) {
+                          this.recognition.stop();
+                          this.startBtn.disabled = false;
+                          this.stopBtn.disabled = true;
+                      }
+                 }
+            },
+             paint: {
+                name: "Paint",
+                init: function(modalContent) {
+                    modalContent.innerHTML = `
+                        <div class="paint-controls">
+                            <label for="paintColor">Color:</label> <input type="color" id="paintColor" value="#000000">
+                            <label for="paintSize">Size:</label> <input type="range" id="paintSize" min="1" max="20" value="3">
+                            <button id="paintClearBtn">Clear</button>
+                        </div>
+                        <canvas id="paintCanvas" width="300" height="300"></canvas>
+                        <p style="font-size: 0.8em; color: #666; margin-top: 5px;">Basic drawing canvas.</p>
+                    `;
+                    this.canvas = modalContent.querySelector('#paintCanvas');
+                    this.ctx = this.canvas.getContext('2d');
+                    this.colorPicker = modalContent.querySelector('#paintColor');
+                    this.sizeSlider = modalContent.querySelector('#paintSize');
+                    this.clearBtn = modalContent.querySelector('#paintClearBtn');
+                    this.isDrawing = false;
+                    this.lastX = 0;
+                    this.lastY = 0;
+
+                    // Set initial canvas size (adjust if needed)
+                    const rect = this.canvas.parentElement.getBoundingClientRect();
+                    this.canvas.width = rect.width - 20; // Adjust for padding
+                    this.canvas.height = 300; // Fixed height example
+
+                     // Event Listeners
+                    this.canvas.addEventListener('mousedown', (e) => this.startDrawing(e));
+                    this.canvas.addEventListener('mousemove', (e) => this.draw(e));
+                    this.canvas.addEventListener('mouseup', () => this.isDrawing = false);
+                    this.canvas.addEventListener('mouseout', () => this.isDrawing = false);
+                    // Touch events
+                     this.canvas.addEventListener('touchstart', (e) => this.startDrawing(e.touches[0]), { passive: false });
+                     this.canvas.addEventListener('touchmove', (e) => { e.preventDefault(); this.draw(e.touches[0]); }, { passive: false });
+                     this.canvas.addEventListener('touchend', () => this.isDrawing = false);
+
+                    this.clearBtn.onclick = () => this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                },
+                 canvas: null, ctx: null, colorPicker: null, sizeSlider: null, clearBtn: null, isDrawing: false, lastX: 0, lastY: 0,
+                 getMousePos: function(event) {
+                     const rect = this.canvas.getBoundingClientRect();
+                      // Use pageX/pageY for broader compatibility with touch/mouse
+                      const clientX = event.clientX || (event.touches && event.touches[0] ? event.touches[0].pageX : 0);
+                      const clientY = event.clientY || (event.touches && event.touches[0] ? event.touches[0].pageY : 0);
+                     return {
+                         x: clientX - rect.left,
+                         y: clientY - rect.top
+                     };
+                 },
+                startDrawing: function(e) {
+                    this.isDrawing = true;
+                    const pos = this.getMousePos(e);
+                    [this.lastX, this.lastY] = [pos.x, pos.y];
+                },
+                draw: function(e) {
+                    if (!this.isDrawing) return;
+                     const pos = this.getMousePos(e);
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(this.lastX, this.lastY);
+                    this.ctx.lineTo(pos.x, pos.y);
+                    this.ctx.strokeStyle = this.colorPicker.value;
+                    this.ctx.lineWidth = this.sizeSlider.value;
+                    this.ctx.lineCap = 'round';
+                    this.ctx.lineJoin = 'round';
+                    this.ctx.stroke();
+                     [this.lastX, this.lastY] = [pos.x, pos.y];
+                }
+            },
+             soundGenerator: {
+                name: "Sound Generator",
+                init: function(modalContent) {
+                     modalContent.innerHTML = `
+                         <label for="sgFreq">Frequency (Hz):</label>
+                         <input type="range" id="sgFreq" min="20" max="20000" value="440"> <span id="sgFreqVal">440 Hz</span>
+                         <label for="sgType">Wave Type:</label>
+                         <select id="sgType"><option>sine</option><option>square</option><option>sawtooth</option><option>triangle</option></select>
+                         <button id="sgPlayBtn">Play</button>
+                         <button id="sgStopBtn">Stop</button>
+                          <p style="font-size: 0.8em; color: #666; margin-top: 10px;">Uses Web Audio API.</p>
+                     `;
+                     this.audioCtx = null;
+                     this.oscillator = null;
+                     this.freqSlider = modalContent.querySelector('#sgFreq');
+                     this.freqVal = modalContent.querySelector('#sgFreqVal');
+                     this.typeSelect = modalContent.querySelector('#sgType');
+                     this.playBtn = modalContent.querySelector('#sgPlayBtn');
+                     this.stopBtn = modalContent.querySelector('#sgStopBtn');
+
+                     this.freqSlider.oninput = () => this.freqVal.textContent = `${this.freqSlider.value} Hz`;
+                     this.playBtn.onclick = () => this.play();
+                     this.stopBtn.onclick = () => this.stop();
+                 },
+                 audioCtx: null, oscillator: null, freqSlider: null, freqVal: null, typeSelect: null, playBtn: null, stopBtn: null,
+                 play: function() {
+                     if (!this.audioCtx) {
+                         this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                     }
+                     if (this.oscillator) { // Stop previous before starting new
+                         this.oscillator.stop();
+                     }
+                     this.oscillator = this.audioCtx.createOscillator();
+                     this.oscillator.type = this.typeSelect.value;
+                     this.oscillator.frequency.setValueAtTime(this.freqSlider.value, this.audioCtx.currentTime);
+                     this.oscillator.connect(this.audioCtx.destination);
+                     this.oscillator.start();
+                     this.playBtn.disabled = true;
+                     this.stopBtn.disabled = false;
+                 },
+                 stop: function() {
+                     if (this.oscillator) {
+                         this.oscillator.stop();
+                         this.oscillator = null;
+                         this.playBtn.disabled = false;
+                         this.stopBtn.disabled = true;
+                     }
+                 }
+            },
+             musicPlayer: {
+                 name: "Music Player",
+                 init: function(modalContent) {
+                     modalContent.innerHTML = `
+                         <label for="musicFile">Select Audio File:</label>
+                         <input type="file" id="musicFile" accept="audio/*">
+                         <audio id="musicAudioPlayer" controls></audio>
+                         <p style="font-size: 0.8em; color: #666; margin-top: 10px;">Plays local audio files selected by you.</p>
+                     `;
+                     const fileInput = modalContent.querySelector('#musicFile');
+                     const player = modalContent.querySelector('#musicAudioPlayer');
+                     fileInput.onchange = (event) => {
+                         const file = event.target.files[0];
+                         if (file) {
+                             const fileURL = URL.createObjectURL(file);
+                             player.src = fileURL;
+                             // Optional: revoke URL when not needed anymore player.onended = () => URL.revokeObjectURL(fileURL);
+                         }
+                     };
+                 }
+            },
+             reminders: {
+                 name: "Reminders",
+                 init: function(modalContent) {
+                      modalContent.innerHTML = `
+                         <label for="reminderText">New Reminder:</label>
+                         <input type="text" id="reminderText" placeholder="Enter reminder...">
+                         <button id="addReminderBtn">Add</button>
+                         <h4>Your Reminders:</h4>
+                         <ul id="reminderList" style="list-style: none; padding: 0;"></ul>
+                          <p style="font-size: 0.8em; color: #666; margin-top: 10px;">Stored in browser's local storage.</p>
+                      `;
+                      this.input = modalContent.querySelector('#reminderText');
+                      this.list = modalContent.querySelector('#reminderList');
+                      this.addBtn = modalContent.querySelector('#addReminderBtn');
+                      this.loadReminders();
+                      this.addBtn.onclick = () => this.addReminder();
+                  },
+                 input: null, list: null, addBtn: null, reminders: [],
+                 loadReminders: function() {
+                     this.reminders = JSON.parse(localStorage.getItem('appReminders') || '[]');
+                     this.renderList();
+                 },
+                 saveReminders: function() {
+                      localStorage.setItem('appReminders', JSON.stringify(this.reminders));
+                 },
+                 addReminder: function() {
+                      const text = this.input.value.trim();
+                      if (text) {
+                          this.reminders.push({ text: text, id: Date.now() }); // Simple ID
+                          this.input.value = '';
+                          this.saveReminders();
+                          this.renderList();
+                      }
+                 },
+                 removeReminder: function(id) {
+                      this.reminders = this.reminders.filter(r => r.id !== id);
+                      this.saveReminders();
+                      this.renderList();
+                 },
+                 renderList: function() {
+                     this.list.innerHTML = '';
+                     this.reminders.forEach(r => {
+                          const li = document.createElement('li');
+                          li.style.display = 'flex';
+                          li.style.justifyContent = 'space-between';
+                          li.style.alignItems = 'center';
+                          li.style.padding = '5px';
+                          li.style.borderBottom = '1px solid #eee';
+                          li.innerHTML = `
+                             <span>${r.text}</span>
+                             <button style="background: #ff6666; font-size: 0.8em; padding: 2px 5px;" onclick="tools.reminders.removeReminder(${r.id})">X</button>
+                          `;
+                          this.list.appendChild(li);
+                     });
+                 }
+            },
+             billingSystem: {
+                 name: "Billing System",
+                 init: function(modalContent) {
+                      modalContent.innerHTML = `
+                          <h4>Add Item</h4>
+                          <label for="itemName">Name:</label><input type="text" id="itemName">
+                          <label for="itemPrice">Price:</label><input type="number" id="itemPrice" step="0.01">
+                          <button id="addItemBillBtn">Add Item</button>
+                          <h4>Current Bill</h4>
+                          <div id="billingItems"></div>
+                          <div id="billingTotal">Total: $0.00</div>
+                           <p style="font-size: 0.8em; color: #666; margin-top: 10px;">Simple bill generation, data is temporary.</p>
+                      `;
+                     this.nameInput = modalContent.querySelector('#itemName');
+                     this.priceInput = modalContent.querySelector('#itemPrice');
+                     this.itemsDiv = modalContent.querySelector('#billingItems');
+                     this.totalDiv = modalContent.querySelector('#billingTotal');
+                     this.addBtn = modalContent.querySelector('#addItemBillBtn');
+                     this.items = [];
+                     this.addBtn.onclick = () => this.addItem();
+                 },
+                 nameInput: null, priceInput: null, itemsDiv: null, totalDiv: null, addBtn: null, items: [],
+                 addItem: function() {
+                     const name = this.nameInput.value.trim();
+                     const price = parseFloat(this.priceInput.value);
+                     if (name && !isNaN(price) && price > 0) {
+                         this.items.push({ name, price });
+                         this.nameInput.value = '';
+                         this.priceInput.value = '';
+                         this.renderBill();
+                     } else {
+                         alert('Please enter valid item name and price.');
+                     }
+                 },
+                 renderBill: function() {
+                     this.itemsDiv.innerHTML = '';
+                     let total = 0;
+                     this.items.forEach(item => {
+                          const itemEl = document.createElement('div');
+                          itemEl.classList.add('billing-item');
+                          itemEl.innerHTML = `<span>${item.name}</span><span>$${item.price.toFixed(2)}</span>`;
+                          this.itemsDiv.appendChild(itemEl);
+                          total += item.price;
+                     });
+                     this.totalDiv.textContent = `Total: $${total.toFixed(2)}`;
+                 }
+            },
+             ruler: {
+                 name: "Ruler",
+                 init: function(modalContent) {
+                      // This is a visual approximation. Calibration needed for accuracy.
+                     modalContent.innerHTML = `
+                         <p style="font-size: 0.8em; color: #666; margin-bottom: 10px;">Note: This ruler is approximate and depends on screen DPI. Not for precise measurements.</p>
+                         <div style="width: 95%; height: 50px; border: 1px solid black; position: relative; margin: 10px auto; background: linear-gradient(to right, black 1px, transparent 1px) 0 0 / 10px 10px, linear-gradient(to right, grey 1px, transparent 1px) 0 0 / 5px 5px;">
+                              <!-- Add markings dynamically if needed, or use background -->
+                              <span style="position: absolute; left: 0; top: -15px; font-size: 0.7em;">0 cm</span>
+                              <span style="position: absolute; left: 98px; top: -15px; font-size: 0.7em;">10</span>
+                              <span style="position: absolute; left: 198px; top: -15px; font-size: 0.7em;">20</span>
+                         </div>
+                           <div style="width: 95%; height: 50px; border: 1px solid black; position: relative; margin: 30px auto 10px; background: linear-gradient(to right, black 1px, transparent 1px) 0 0 / 25.4px 10px, linear-gradient(to right, grey 1px, transparent 1px) 0 0 / 12.7px 5px;">
+                              <span style="position: absolute; left: 0; top: -15px; font-size: 0.7em;">0 in</span>
+                              <span style="position: absolute; left: 100px; top: -15px; font-size: 0.7em;">4</span>
+                              <span style="position: absolute; left: 202px; top: -15px; font-size: 0.7em;">8</span>
+                         </div>
+                     `;
+                 }
+            },
+             // --- Sensor/API Based Tools ---
+             myAddress: {
+                name: "My Address",
+                init: function(modalContent) {
+                    modalContent.innerHTML = `
+                        <button id="getAddrBtn">Get Current Location</button>
+                        <div id="addrOutput" style="margin-top: 15px;"></div>
+                        <p style="font-size: 0.8em; color: #666; margin-top: 10px;">Uses Geolocation API. Requires permission and internet connection. Accuracy depends on device.</p>
+                    `;
+                    this.outputDiv = modalContent.querySelector('#addrOutput');
+                    modalContent.querySelector('#getAddrBtn').onclick = () => this.getLocation();
+                },
+                outputDiv: null,
+                 getLocation: function() {
+                     if (navigator.geolocation) {
+                         this.outputDiv.textContent = "Getting location...";
+                         navigator.geolocation.getCurrentPosition(
+                             (position) => {
+                                 const lat = position.coords.latitude;
+                                 const lon = position.coords.longitude;
+                                 // Simple display - add reverse geocoding API call for address
+                                 this.outputDiv.innerHTML = `Latitude: ${lat.toFixed(6)}<br>Longitude: ${lon.toFixed(6)}`;
+                                 // Optional: Fetch address from coords using a reverse geocoding service (requires API key usually)
+                             },
+                             (error) => {
+                                 this.outputDiv.textContent = `Error: ${error.message}`;
+                             },
+                             { enableHighAccuracy: true }
+                         );
+                     } else {
+                         this.outputDiv.textContent = "Geolocation is not supported by this browser.";
+                     }
+                 }
+            },
+             compass: {
+                 name: "Compass",
+                 init: function(modalContent) {
+                     modalContent.innerHTML = `
+                         <div id="compassDial" style="width: 150px; height: 150px; border: 2px solid black; border-radius: 50%; margin: 20px auto; position: relative; background-color: #eee;">
+                             <div id="compassNeedle" style="width: 2px; height: 70px; background-color: red; position: absolute; left: 74px; top: 5px; transform-origin: bottom center;"></div>
+                             <div style="position:absolute; top: 0; left: 50%; transform: translateX(-50%); font-weight: bold;">N</div>
+                             <div style="position:absolute; bottom: 0; left: 50%; transform: translateX(-50%);">S</div>
+                              <div style="position:absolute; top: 50%; left: 0; transform: translateY(-50%);">W</div>
+                              <div style="position:absolute; top: 50%; right: 0; transform: translateY(-50%);">E</div>
+                         </div>
+                         <div id="compassReading" style="text-align: center; font-size: 1.2em;">--°</div>
+                          <p style="font-size: 0.8em; color: #666; margin-top: 10px;">Uses Device Orientation API. May require calibration and permission. Accuracy varies.</p>
+                     `;
+                     this.needle = modalContent.querySelector('#compassNeedle');
+                     this.reading = modalContent.querySelector('#compassReading');
+                     this.startListener();
+                 },
+                 needle: null, reading: null, listener: null,
+                 startListener: function() {
+                      if (window.DeviceOrientationEvent) {
+                          this.listener = (event) => {
+                              // webkitCompassHeading is more direct on iOS
+                              let heading = event.webkitCompassHeading || (360 - event.alpha);
+                              if (heading !== null && heading !== undefined) {
+                                  heading = Math.round(heading);
+                                  this.needle.style.transform = `rotate(${heading}deg)`;
+                                  this.reading.textContent = `${heading}°`;
+                              } else {
+                                  this.reading.textContent = "N/A";
+                              }
+                          };
+                          window.addEventListener('deviceorientationabsolute', this.listener, true);
+                          // Fallback for non-absolute
+                           window.addEventListener('deviceorientation', this.listener, true);
+
+                           // Request permission on iOS 13+
+                           if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                               DeviceOrientationEvent.requestPermission()
+                                   .then(permissionState => {
+                                       if (permissionState !== 'granted') {
+                                           alert('Permission needed for compass.');
+                                       }
+                                   })
+                                   .catch(console.error);
+                           }
+                      } else {
+                          this.reading.textContent = "Not Supported";
+                      }
+                 },
+                 stopListener: function() {
+                     if (this.listener) {
+                         window.removeEventListener('deviceorientationabsolute', this.listener, true);
+                          window.removeEventListener('deviceorientation', this.listener, true);
+                         this.listener = null;
+                     }
+                 }
+            },
+            leveler: {
+                name: "Leveler",
+                 init: function(modalContent) {
+                     modalContent.innerHTML = `
+                         <div style="text-align: center; margin-bottom: 15px;">
+                             <div>Tilt Left/Right (Roll): <span id="levelRoll">--</span>°</div>
+                             <div>Tilt Front/Back (Pitch): <span id="levelPitch">--</span>°</div>
+                         </div>
+                         <div id="levelBubbleContainer" style="width: 200px; height: 200px; border: 2px solid black; border-radius: 50%; margin: 10px auto; position: relative; background: radial-gradient(circle at 50% 50%, white, lightblue);">
+                              <div id="levelBubble" style="width: 30px; height: 30px; background-color: rgba(0,0,200,0.7); border-radius: 50%; position: absolute; top: 85px; left: 85px; border: 1px solid white;"></div>
+                              <div style="position: absolute; width: 100%; height: 1px; background: #555; top: 50%; left: 0;"></div>
+                              <div style="position: absolute; width: 1px; height: 100%; background: #555; left: 50%; top: 0;"></div>
+                         </div>
+                          <p style="font-size: 0.8em; color: #666; margin-top: 10px;">Uses Device Orientation API. Accuracy varies.</p>
+                     `;
+                     this.rollSpan = modalContent.querySelector('#levelRoll');
+                     this.pitchSpan = modalContent.querySelector('#levelPitch');
+                     this.bubble = modalContent.querySelector('#levelBubble');
+                     this.bubbleContainer = modalContent.querySelector('#levelBubbleContainer');
+                     this.startListener();
+                 },
+                 rollSpan: null, pitchSpan: null, bubble: null, bubbleContainer: null, listener: null,
+                 startListener: function() {
+                      if (window.DeviceOrientationEvent) {
+                           this.listener = (event) => {
+                               // Beta = pitch (front/back), Gamma = roll (left/right)
+                               const pitch = event.beta ? Math.round(event.beta) : 0;
+                               const roll = event.gamma ? Math.round(event.gamma) : 0;
+
+                               this.rollSpan.textContent = roll;
+                               this.pitchSpan.textContent = pitch;
+
+                               // Move bubble (adjust sensitivity/range as needed)
+                               const maxTilt = 45; // Max degrees to map to edge
+                               const containerSize = this.bubbleContainer.offsetWidth;
+                               const bubbleSize = this.bubble.offsetWidth;
+                               const centerX = (containerSize - bubbleSize) / 2;
+                               const centerY = (containerSize - bubbleSize) / 2;
+
+                               // Clamp roll/pitch to maxTilt
+                               const clampedRoll = Math.max(-maxTilt, Math.min(maxTilt, roll));
+                               const clampedPitch = Math.max(-maxTilt, Math.min(maxTilt, pitch));
+
+                               const bubbleX = centerX + (clampedRoll / maxTilt) * centerX;
+                               const bubbleY = centerY + (clampedPitch / maxTilt) * centerY;
+
+                               this.bubble.style.left = `${bubbleX}px`;
+                               this.bubble.style.top = `${bubbleY}px`;
+                           };
+                           window.addEventListener('deviceorientation', this.listener, true);
+                           // Request permission if needed
+                            if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                               DeviceOrientationEvent.requestPermission().catch(console.error);
+                           }
+                      } else {
+                          this.rollSpan.textContent = "N/A";
+                          this.pitchSpan.textContent = "N/A";
+                      }
+                 },
+                 stopListener: function() {
+                     if (this.listener) {
+                         window.removeEventListener('deviceorientation', this.listener, true);
+                         this.listener = null;
+                     }
+                 }
+            },
+             speedometer: {
+                 name: "Speedometer",
+                 init: function(modalContent) {
+                     modalContent.innerHTML = `
+                         <div id="speedDisplay" style="font-size: 2.5em; text-align: center; margin: 20px 0;">0 km/h</div>
+                         <div id="speedUnitToggle" style="text-align: center;"><button>Switch to mph</button></div>
+                         <p style="font-size: 0.8em; color: #666; margin-top: 10px;">Uses Geolocation API. Requires permission, movement, and internet. Accuracy varies.</p>
+                     `;
+                     this.display = modalContent.querySelector('#speedDisplay');
+                     this.unit = 'km/h'; // or 'mph'
+                     // Geolocation watchPosition needed - complex to implement fully here
+                     modalContent.querySelector('#speedUnitToggle button').onclick = () => alert('Speedometer logic not fully implemented.');
+                 }
+            },
+             altitude: {
+                 name: "Altitude",
+                 init: function(modalContent) {
+                      modalContent.innerHTML = `
+                         <button id="getAltBtn">Get Current Altitude</button>
+                         <div id="altOutput" style="font-size: 1.5em; margin-top: 15px;">-- meters</div>
+                         <p style="font-size: 0.8em; color: #666; margin-top: 10px;">Uses Geolocation API. Requires permission and internet. Accuracy varies significantly.</p>
+                     `;
+                     this.outputDiv = modalContent.querySelector('#altOutput');
+                     modalContent.querySelector('#getAltBtn').onclick = () => this.getAltitude();
+                 },
+                 outputDiv: null,
+                  getAltitude: function() {
+                      if (navigator.geolocation) {
+                          this.outputDiv.textContent = "Getting altitude...";
+                          navigator.geolocation.getCurrentPosition(
+                              (position) => {
+                                  if (position.coords.altitude !== null) {
+                                      this.outputDiv.textContent = `${position.coords.altitude.toFixed(2)} meters`;
+                                  } else {
+                                       this.outputDiv.textContent = "Altitude not available.";
+                                  }
+                              },
+                              (error) => { this.outputDiv.textContent = `Error: ${error.message}`; },
+                              { enableHighAccuracy: true }
+                          );
+                      } else {
+                          this.outputDiv.textContent = "Geolocation not supported.";
+                      }
+                  }
+            },
+            vibrometer: {
+                name: "Vibrometer / Motion Detector",
+                 init: function(modalContent) {
+                     modalContent.innerHTML = `
+                         <div>X-axis Accel: <span id="vibroX">--</span> m/s²</div>
+                         <div>Y-axis Accel: <span id="vibroY">--</span> m/s²</div>
+                         <div>Z-axis Accel: <span id="vibroZ">--</span> m/s²</div>
+                         <div id="vibroMagnitude" style="font-size: 1.5em; margin-top: 15px;">Total Accel: -- m/s²</div>
+                          <p style="font-size: 0.8em; color: #666; margin-top: 10px;">Uses Device Motion API (detects acceleration, not true vibration frequency). Accuracy varies.</p>
+                     `;
+                     this.xSpan = modalContent.querySelector('#vibroX');
+                     this.ySpan = modalContent.querySelector('#vibroY');
+                     this.zSpan = modalContent.querySelector('#vibroZ');
+                     this.magSpan = modalContent.querySelector('#vibroMagnitude');
+                     this.startListener();
+                 },
+                  xSpan: null, ySpan: null, zSpan: null, magSpan: null, listener: null,
+                 startListener: function() {
+                     if (window.DeviceMotionEvent) {
+                         this.listener = (event) => {
+                             const acc = event.accelerationIncludingGravity || event.acceleration; // Use gravity if available
+                             if (acc && acc.x !== null) {
+                                 const x = acc.x.toFixed(2);
+                                 const y = acc.y.toFixed(2);
+                                 const z = acc.z.toFixed(2);
+                                 const magnitude = Math.sqrt(acc.x**2 + acc.y**2 + acc.z**2).toFixed(2);
+                                 this.xSpan.textContent = x;
+                                 this.ySpan.textContent = y;
+                                 this.zSpan.textContent = z;
+                                 this.magSpan.textContent = `Total Accel: ${magnitude} m/s²`;
+                             } else {
+                                this.magSpan.textContent = "Motion data N/A";
+                             }
+                         };
+                         window.addEventListener('devicemotion', this.listener, true);
+                          // Request permission if needed (though less common for motion)
+                         if (typeof DeviceMotionEvent.requestPermission === 'function') {
+                            DeviceMotionEvent.requestPermission().catch(console.error);
+                         }
+                     } else {
+                          this.magSpan.textContent = "Device Motion Not Supported";
+                     }
+                 },
+                 stopListener: function() {
+                     if (this.listener) {
+                         window.removeEventListener('devicemotion', this.listener, true);
+                         this.listener = null;
+                     }
+                 }
+            },
+             soundIntensity: {
+                 name: "Sound Intensity (Decibels)",
+                 init: function(modalContent) {
+                     modalContent.innerHTML = `
+                         <div id="soundDbDisplay" style="font-size: 2em; text-align: center; margin: 20px 0;">-- dB</div>
+                         <button id="soundStartBtn">Start Measuring</button>
+                         <button id="soundStopBtn" disabled>Stop Measuring</button>
+                         <canvas id="soundMeterCanvas" width="300" height="50" style="border: 1px solid #ccc; margin-top: 10px;"></canvas>
+                          <p style="font-size: 0.8em; color: #666; margin-top: 10px;">Uses Microphone & Web Audio API. Requires permission. Measures relative sound level, not calibrated dB.</p>
+                     `;
+                     this.display = modalContent.querySelector('#soundDbDisplay');
+                     this.canvas = modalContent.querySelector('#soundMeterCanvas');
+                     this.canvasCtx = this.canvas.getContext('2d');
+                     this.startBtn = modalContent.querySelector('#soundStartBtn');
+                     this.stopBtn = modalContent.querySelector('#soundStopBtn');
+                     this.audioCtx = null;
+                     this.analyser = null;
+                     this.source = null;
+                     this.dataArray = null;
+                     this.rafId = null;
+
+                     this.startBtn.onclick = () => this.startMic();
+                     this.stopBtn.onclick = () => this.stopMic();
+                 },
+                 display: null, canvas: null, canvasCtx: null, startBtn: null, stopBtn: null, audioCtx: null, analyser: null, source: null, dataArray: null, rafId: null,
+                 startMic: async function() {
+                     try {
+                         const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+                         this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                         this.analyser = this.audioCtx.createAnalyser();
+                         this.analyser.fftSize = 256; // Smaller size for performance
+                         this.source = this.audioCtx.createMediaStreamSource(stream);
+                         this.source.connect(this.analyser);
+                         this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
+
+                         this.startBtn.disabled = true;
+                         this.stopBtn.disabled = false;
+                         this.drawMeter();
+                     } catch (err) {
+                         alert(`Error accessing microphone: ${err.message}`);
+                         this.display.textContent = "Error";
+                     }
+                 },
+                 stopMic: function() {
+                      if (this.rafId) cancelAnimationFrame(this.rafId);
+                      if (this.source) this.source.disconnect();
+                      if (this.audioCtx) this.audioCtx.close(); // Close context
+                       // Stop mic stream tracks
+                       if (this.source && this.source.mediaStream) {
+                            this.source.mediaStream.getTracks().forEach(track => track.stop());
+                       }
+
+                      this.audioCtx = null;
+                      this.analyser = null;
+                      this.source = null;
+                      this.dataArray = null;
+                      this.startBtn.disabled = false;
+                      this.stopBtn.disabled = true;
+                      this.display.textContent = "-- dB";
+                      // Clear canvas
+                      this.canvasCtx.fillStyle = '#fff';
+                      this.canvasCtx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                 },
+                 drawMeter: function() {
+                      this.rafId = requestAnimationFrame(() => this.drawMeter());
+                      this.analyser.getByteFrequencyData(this.dataArray);
+
+                      let sum = 0;
+                      for (let i = 0; i < this.dataArray.length; i++) {
+                          sum += this.dataArray[i];
+                      }
+                      const average = sum / this.dataArray.length;
+                      // This is a very rough approximation of dB, not calibrated!
+                      const dB = 20 * Math.log10(average / 10 + 1); // Arbitrary scaling for display
+                      this.display.textContent = `${Math.max(0, dB).toFixed(1)} dB`; // Show >= 0
+
+                     // Draw visual meter
+                      const WIDTH = this.canvas.width;
+                      const HEIGHT = this.canvas.height;
+                      this.canvasCtx.fillStyle = '#fff';
+                      this.canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+                      const barWidth = (average / 256) * WIDTH; // Scale based on average value
+                      this.canvasCtx.fillStyle = 'green';
+                      this.canvasCtx.fillRect(0, 0, barWidth, HEIGHT);
+                 }
+            },
+             gMeter: {
+                name: "G-Meter",
+                 init: function(modalContent) {
+                      // Reuses Vibrometer's logic essentially
+                     modalContent.innerHTML = `
+                         <div>X-axis Accel: <span id="gMeterX">--</span> g</div>
+                         <div>Y-axis Accel: <span id="gMeterY">--</span> g</div>
+                         <div>Z-axis Accel: <span id="gMeterZ">--</span> g</div>
+                         <div id="gMeterMagnitude" style="font-size: 1.5em; margin-top: 15px;">Total Accel: -- g</div>
+                          <p style="font-size: 0.8em; color: #666; margin-top: 10px;">Uses Device Motion API. 1g ≈ 9.8 m/s². Accuracy varies.</p>
+                     `;
+                     this.xSpan = modalContent.querySelector('#gMeterX');
+                     this.ySpan = modalContent.querySelector('#gMeterY');
+                     this.zSpan = modalContent.querySelector('#gMeterZ');
+                     this.magSpan = modalContent.querySelector('#gMeterMagnitude');
+                     this.startListener();
+                 },
+                  xSpan: null, ySpan: null, zSpan: null, magSpan: null, listener: null,
+                 startListener: function() { // Same listener as vibrometer, but convert units
+                     if (window.DeviceMotionEvent) {
+                         this.listener = (event) => {
+                              const acc = event.accelerationIncludingGravity || event.acceleration;
+                              if (acc && acc.x !== null) {
+                                  const g = 9.81; // Approx gravity
+                                  const x = (acc.x / g).toFixed(2);
+                                  const y = (acc.y / g).toFixed(2);
+                                  const z = (acc.z / g).toFixed(2);
+                                  const magnitude = (Math.sqrt(acc.x**2 + acc.y**2 + acc.z**2) / g).toFixed(2);
+                                  this.xSpan.textContent = x;
+                                  this.ySpan.textContent = y;
+                                  this.zSpan.textContent = z;
+                                  this.magSpan.textContent = `Total Accel: ${magnitude} g`;
+                              } else {
+                                this.magSpan.textContent = "Motion data N/A";
+                              }
+                         };
+                         window.addEventListener('devicemotion', this.listener, true);
+                         if (typeof DeviceMotionEvent.requestPermission === 'function') {
+                             DeviceMotionEvent.requestPermission().catch(console.error);
+                         }
+                     } else {
+                          this.magSpan.textContent = "Device Motion Not Supported";
+                     }
+                 },
+                 stopListener: function() { // Same stop as vibrometer
+                     if (this.listener) {
+                         window.removeEventListener('devicemotion', this.listener, true);
+                         this.listener = null;
+                     }
+                 }
+            },
+            protractor: {
+                name: "Protractor (Orientation)",
+                 init: function(modalContent) {
+                     // Reuses compass logic for angle
+                      modalContent.innerHTML = `
+                         <div id="protractorReading" style="text-align: center; font-size: 2em; margin: 20px 0;">--°</div>
+                         <p style="font-size: 0.8em; color: #666; margin-top: 10px;">Measures device orientation (absolute heading if available). Accuracy varies.</p>
+                     `;
+                     this.reading = modalContent.querySelector('#protractorReading');
+                     this.startListener();
+                 },
+                 reading: null, listener: null,
+                 startListener: function() { // Same listener as compass
+                     if (window.DeviceOrientationEvent) {
+                          this.listener = (event) => {
+                              let heading = event.webkitCompassHeading || (360 - event.alpha);
+                              if (heading !== null && heading !== undefined) {
+                                  this.reading.textContent = `${Math.round(heading)}°`;
+                              } else {
+                                  this.reading.textContent = "N/A";
+                              }
+                          };
+                           window.addEventListener('deviceorientationabsolute', this.listener, true);
+                           window.addEventListener('deviceorientation', this.listener, true);
+                           if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                              DeviceOrientationEvent.requestPermission().catch(console.error);
+                           }
+                      } else {
+                          this.reading.textContent = "Not Supported";
+                      }
+                 },
+                 stopListener: function() { // Same stop as compass
+                     if (this.listener) {
+                          window.removeEventListener('deviceorientationabsolute', this.listener, true);
+                          window.removeEventListener('deviceorientation', this.listener, true);
+                         this.listener = null;
+                     }
+                 }
+            },
+            screenRecorder: {
+                 name: "Screen Recorder",
+                 init: function(modalContent) {
+                     modalContent.innerHTML = `
+                         <button id="screenRecStartBtn">Start Recording Screen</button>
+                         <button id="screenRecStopBtn" disabled>Stop Recording</button>
+                         <video id="screenRecPreview" style="max-width: 100%; margin-top: 15px; background: #eee;" autoplay muted playsinline></video>
+                         <div id="screenRecDownloadLink" style="margin-top: 10px;"></div>
+                         <p style="font-size: 0.8em; color: #666; margin-top: 10px;">Uses Screen Capture API. Requires permission. Saves a .webm video file.</p>
+                     `;
+                     this.startBtn = modalContent.querySelector('#screenRecStartBtn');
+                     this.stopBtn = modalContent.querySelector('#screenRecStopBtn');
+                     this.preview = modalContent.querySelector('#screenRecPreview');
+                     this.downloadLink = modalContent.querySelector('#screenRecDownloadLink');
+                     this.mediaRecorder = null;
+                     this.recordedChunks = [];
+                     this.stream = null;
+
+                     if (navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) {
+                          this.startBtn.onclick = () => this.startRecording();
+                          this.stopBtn.onclick = () => this.stopRecording();
+                     } else {
+                          modalContent.innerHTML = "<p>Screen Capture API not supported in this browser.</p>";
+                     }
+                 },
+                  startBtn: null, stopBtn: null, preview: null, downloadLink: null, mediaRecorder: null, recordedChunks: [], stream: null,
+                 startRecording: async function() {
+                     this.recordedChunks = []; // Reset chunks
+                     this.downloadLink.innerHTML = ''; // Clear old link
+                     try {
+                         this.stream = await navigator.mediaDevices.getDisplayMedia({
+                             video: { mediaSource: "screen" }, // or window, tab
+                             audio: true // Optional: try to capture audio
+                         });
+                         this.preview.srcObject = this.stream; // Show preview
+                         this.mediaRecorder = new MediaRecorder(this.stream, { mimeType: 'video/webm' }); // Choose mime type
+
+                         this.mediaRecorder.ondataavailable = (event) => {
+                             if (event.data.size > 0) {
+                                 this.recordedChunks.push(event.data);
+                             }
+                         };
+
+                         this.mediaRecorder.onstop = () => {
+                             const blob = new Blob(this.recordedChunks, { type: 'video/webm' });
+                             const url = URL.createObjectURL(blob);
+                             this.downloadLink.innerHTML = `<a href="${url}" download="screen-recording.webm">Download Recording</a>`;
+                             this.preview.srcObject = null; // Clear preview
+                             this.startBtn.disabled = false;
+                             this.stopBtn.disabled = true;
+                              this.stream.getTracks().forEach(track => track.stop()); // Stop stream tracks
+                              this.stream = null;
+                         };
+
+                         this.mediaRecorder.start();
+                         this.startBtn.disabled = true;
+                         this.stopBtn.disabled = false;
+                     } catch (err) {
+                         alert(`Error starting screen recording: ${err.message}`);
+                         this.startBtn.disabled = false;
+                         this.stopBtn.disabled = true;
+                     }
+                 },
+                 stopRecording: function() {
+                      if (this.mediaRecorder && this.mediaRecorder.state === "recording") {
+                          this.mediaRecorder.stop();
+                           // Tracks are stopped in onstop handler now
+                      }
+                 }
+            },
+            mike: {
+                 name: "Microphone to Speaker",
+                 init: function(modalContent) {
+                     modalContent.innerHTML = `
+                         <button id="mikeStartBtn">Start Passthrough</button>
+                         <button id="mikeStopBtn" disabled>Stop Passthrough</button>
+                         <p style="font-size: 0.8em; color: #666; margin-top: 10px;">Routes microphone input directly to speakers. Can cause feedback! Use headphones or lower volume.</p>
+                     `;
+                      this.startBtn = modalContent.querySelector('#mikeStartBtn');
+                      this.stopBtn = modalContent.querySelector('#mikeStopBtn');
+                      this.audioCtx = null;
+                      this.source = null;
+                      this.stream = null;
+
+                      this.startBtn.onclick = () => this.startPassthrough();
+                      this.stopBtn.onclick = () => this.stopPassthrough();
+                 },
+                 startBtn: null, stopBtn: null, audioCtx: null, source: null, stream: null,
+                 startPassthrough: async function() {
+                      try {
+                          this.stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+                          this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                          this.source = this.audioCtx.createMediaStreamSource(this.stream);
+                          this.source.connect(this.audioCtx.destination); // Connect directly to output
+                          this.startBtn.disabled = true;
+                          this.stopBtn.disabled = false;
+                      } catch (err) {
+                          alert(`Error accessing microphone: ${err.message}`);
+                      }
+                 },
+                 stopPassthrough: function() {
+                       if (this.source) this.source.disconnect();
+                       if (this.audioCtx) this.audioCtx.close();
+                       if (this.stream) this.stream.getTracks().forEach(track => track.stop());
+
+                       this.audioCtx = null;
+                       this.source = null;
+                       this.stream = null;
+                       this.startBtn.disabled = false;
+                       this.stopBtn.disabled = true;
+                 }
+            },
+             deviceInfo: {
+                name: "Device Info (Basic)",
+                init: function(modalContent) {
+                     const info = `
+                         <b>Browser:</b> ${navigator.appName || 'N/A'}<br>
+                         <b>Code Name:</b> ${navigator.appCodeName || 'N/A'}<br>
+                         <b>Version:</b> ${navigator.appVersion || 'N/A'}<br>
+                         <b>User Agent:</b> ${navigator.userAgent || 'N/A'}<br>
+                         <b>Platform:</b> ${navigator.platform || 'N/A'}<br>
+                         <b>Language:</b> ${navigator.language || 'N/A'}<br>
+                         <b>Online:</b> ${navigator.onLine}<br>
+                         <b>Cookies Enabled:</b> ${navigator.cookieEnabled}<br>
+                         <b>Screen Width:</b> ${screen.width}px<br>
+                         <b>Screen Height:</b> ${screen.height}px<br>
+                         <b>Available Width:</b> ${screen.availWidth}px<br>
+                         <b>Available Height:</b> ${screen.availHeight}px<br>
+                         <b>Color Depth:</b> ${screen.colorDepth} bits<br>
+                         <b>Pixel Depth:</b> ${screen.pixelDepth} bits<br>
+                         <b>Logical Processors (approx):</b> ${navigator.hardwareConcurrency || 'N/A'}<br>
+                         <b>Device Memory (approx GB):</b> ${navigator.deviceMemory || 'N/A'}
+                     `;
+                    modalContent.innerHTML = `<div style="font-size: 0.9em; line-height: 1.6;">${info}</div> <p style="font-size: 0.8em; color: #666; margin-top: 10px;">Basic info from browser's navigator object.</p>`;
+                 }
+            },
+
+             // Placeholder for removed/impossible tools
+             placeholder: {
+                 name: "Tool Not Available",
+                 init: function(modalContent, toolName) {
+                     modalContent.innerHTML = `<p>The tool '<b>${toolName || 'This tool'}</b>' cannot be implemented in a standard web browser due to security restrictions or lack of hardware access (e.g., IR Blaster, specific sensors, file system lock, etc.).</p>`;
+                 }
+             }
+        };
+
+        // --- Global Variables & Event Listeners ---
+        const searchInput = document.getElementById('searchInput');
+        const toolsGrid = document.getElementById('toolsGrid');
+        const allToolItems = toolsGrid.getElementsByClassName('tool-item'); // Live collection
+        const modalsContainer = document.getElementById('modalsContainer');
+        let activeModal = null;
+        let currentToolCleanup = null; // Function to stop listeners etc.
+
+        // Function to open a tool's modal
+        function openToolModal(toolKey) {
+            closeActiveModal(); // Close any existing modal first
+
+            const tool = tools[toolKey];
+            if (!tool) { console.error("Tool not found:", toolKey); return; }
+
+            const modal = document.createElement('div');
+            modal.classList.add('tool-modal');
+            modal.setAttribute('data-tool-key', toolKey); // Keep track of the tool
+
+            const modalContent = document.createElement('div');
+            modalContent.classList.add('modal-content');
+
+            const title = document.createElement('h3');
+            title.textContent = tool.name;
+
+            const closeButton = document.createElement('button');
+            closeButton.classList.add('close-modal');
+            closeButton.textContent = 'Close Tool';
+            closeButton.onclick = () => closeActiveModal();
+
+            modal.appendChild(title);
+            modal.appendChild(modalContent);
+            modal.appendChild(closeButton);
+            modalsContainer.appendChild(modal);
+
+            // Initialize the tool's UI and logic
+            if (typeof tool.init === 'function') {
+                tool.init(modalContent);
+            }
+
+             // Store cleanup function if the tool provides one (like stopping listeners)
+             if (typeof tool.stopListener === 'function') {
+                 currentToolCleanup = tool.stopListener.bind(tool); // Bind 'this' correctly
+             } else if (toolKey === 'soundIntensity' && typeof tool.stopMic === 'function') {
+                 currentToolCleanup = tool.stopMic.bind(tool);
+             } else if (toolKey === 'screenRecorder' && typeof tool.stopRecording === 'function' ) {
+                 // Auto-stop recording might be complex, manual stop is better
+                 currentToolCleanup = () => { if(tool.mediaRecorder && tool.mediaRecorder.state === "recording") tool.stopRecording() };
+             } else if (toolKey === 'mike' && typeof tool.stopPassthrough === 'function' ) {
+                currentToolCleanup = tool.stopPassthrough.bind(tool);
+             } else if (toolKey === 'speechToText' && typeof tool.stopRec === 'function' ) {
+                 currentToolCleanup = tool.stopRec.bind(tool);
+             } else if (toolKey === 'soundGenerator' && typeof tool.stop === 'function' ) {
+                 currentToolCleanup = tool.stop.bind(tool);
+             } else {
+                 currentToolCleanup = null;
+             }
+
+
+            modal.classList.add('active');
+            activeModal = modal;
+        }
+
+        // Function to close the currently active modal
+        function closeActiveModal() {
+            if (activeModal) {
+                // Run cleanup function for the tool if it exists
+                 if (currentToolCleanup) {
+                     try {
+                         currentToolCleanup();
+                     } catch (e) {
+                         console.error("Error during tool cleanup:", e);
+                     }
+                     currentToolCleanup = null;
+                 }
+                activeModal.classList.remove('active');
+                // Remove modal from DOM after animation (optional) or immediately
+                modalsContainer.removeChild(activeModal);
+                activeModal = null;
+            }
+        }
+
+        // Event listener for tool clicks (using event delegation)
+        toolsGrid.addEventListener('click', function(event) {
+            const clickedItem = event.target.closest('.tool-item');
+            if (clickedItem) {
+                const toolKey = clickedItem.getAttribute('data-tool');
+                if (toolKey) {
+                    openToolModal(toolKey);
+                } else {
+                    // Handle items without a specific tool key (maybe placeholders)
+                    alert(`Tool '${clickedItem.getAttribute('data-name')}' functionality not defined.`);
+                }
+            }
+        });
+
+
+        // Search Functionality
+        searchInput.addEventListener('input', function(event) {
+            const searchTerm = event.target.value.toLowerCase().trim();
+
+            Array.from(allToolItems).forEach(function(item) {
+                const toolName = item.getAttribute('data-name').toLowerCase();
+                // Simple text search
+                if (toolName.includes(searchTerm)) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+        });
+
+        // --- Specific Tool Functions (called via onclick within modals) ---
+
+        // Calculator Functions
+        let calcDisplayRef;
+        let calcCurrentInput = '';
+        let calcOperator = null;
+        let calcFirstOperand = null;
+
+        function initCalcRefs() {
+             if (activeModal && activeModal.getAttribute('data-tool-key') === 'calculator') {
+                 calcDisplayRef = activeModal.querySelector('#calcDisplay');
+                 if (!calcDisplayRef.value) calcDisplayRef.value = '0'; // Init display
+             }
+        }
+        function appendToCalc(value) {
+            initCalcRefs();
+            if (calcCurrentInput === '0' && value !== '.') calcCurrentInput = ''; // Avoid leading zeros unless decimal
+            if (value === '.' && calcCurrentInput.includes('.')) return; // Only one decimal point
+            calcCurrentInput += value;
+            calcDisplayRef.value = calcCurrentInput;
+        }
+        function calcOperation(op) {
+            initCalcRefs();
+            if (calcCurrentInput === '') return;
+            if (calcFirstOperand !== null) { // Chain operations
+                calculateResult();
+            }
+            calcFirstOperand = parseFloat(calcCurrentInput);
+            calcOperator = op;
+            calcCurrentInput = '';
+        }
+        function calculateResult() {
+            initCalcRefs();
+            if (calcOperator === null || calcFirstOperand === null || calcCurrentInput === '') return;
+            const secondOperand = parseFloat(calcCurrentInput);
+            let result;
+            switch (calcOperator) {
+                case '+': result = calcFirstOperand + secondOperand; break;
+                case '-': result = calcFirstOperand - secondOperand; break;
+                case '*': result = calcFirstOperand * secondOperand; break;
+                case '/': result = calcFirstOperand / secondOperand; break;
+                default: return;
+            }
+            calcDisplayRef.value = result;
+            calcCurrentInput = String(result);
+            calcOperator = null;
+            calcFirstOperand = null; // Reset for next calculation start
+        }
+        function clearCalc() {
+            initCalcRefs();
+            calcCurrentInput = '';
+            calcOperator = null;
+            calcFirstOperand = null;
+            calcDisplayRef.value = '0';
+        }
+
+         // Days Counter Function
+         function calculateDays() {
+             if (activeModal && activeModal.getAttribute('data-tool-key') === 'daysCounter') {
+                 const date1 = new Date(activeModal.querySelector('#dcDate1').value);
+                 const date2 = new Date(activeModal.querySelector('#dcDate2').value);
+                 const output = activeModal.querySelector('#dcResult');
+                 if (!isNaN(date1) && !isNaN(date2)) {
+                      const diffTime = Math.abs(date2 - date1);
+                      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                      output.textContent = `Difference: ${diffDays} days`;
+                 } else {
+                      output.textContent = "Please select valid dates.";
+                 }
+             }
+         }
+
+          // Random Generator Function
+         function generateRandom() {
+              if (activeModal && activeModal.getAttribute('data-tool-key') === 'randomGenerator') {
+                 const min = parseInt(activeModal.querySelector('#randMin').value);
+                 const max = parseInt(activeModal.querySelector('#randMax').value);
+                 const output = activeModal.querySelector('#randResult');
+                 if (!isNaN(min) && !isNaN(max) && min <= max) {
+                     const randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+                     output.textContent = `Result: ${randomNum}`;
+                 } else {
+                     output.textContent = "Invalid min/max values.";
+                 }
+              }
+         }
+
+          // QR Code Function
+         function generateQRCode() {
+             if (activeModal && activeModal.getAttribute('data-tool-key') === 'generateQr') {
+                  const text = activeModal.querySelector('#qrTextInput').value;
+                  const outputDiv = tools.generateQr.outputDiv; // Get reference stored during init
+                  outputDiv.innerHTML = ''; // Clear previous QR
+                  if (text && typeof QRCode !== 'undefined') {
+                      try {
+                         new QRCode(outputDiv, {
+                             text: text,
+                             width: 128,
+                             height: 128,
+                             colorDark : "#000000",
+                             colorLight : "#ffffff",
+                             correctLevel : QRCode.CorrectLevel.H
+                         });
+                      } catch (e) {
+                          console.error("QR Code generation error:", e);
+                          outputDiv.textContent = "Error generating QR Code.";
+                      }
+                  } else if (!text) {
+                      outputDiv.textContent = "Please enter text.";
+                  } else {
+                       outputDiv.textContent = "QR Code library not loaded.";
+                  }
+             }
+         }
+
+         // Morse Code Function
+         function convertToMorse() {
+             if (activeModal && activeModal.getAttribute('data-tool-key') === 'morseCode') {
+                 const text = activeModal.querySelector('#morseInput').value.toUpperCase();
+                 const output = activeModal.querySelector('#morseOutput');
+                 const morseCodeMap = { 'A':'.-', 'B':'-...', 'C':'-.-.', 'D':'-..', 'E':'.', 'F':'..-.', 'G':'--.', 'H':'....', 'I':'..', 'J':'.---', 'K':'-.-', 'L':'.-..', 'M':'--', 'N':'-.', 'O':'---', 'P':'.--.', 'Q':'--.-', 'R':'.-.', 'S':'...', 'T':'-', 'U':'..-', 'V':'...-', 'W':'.--', 'X':'-..-', 'Y':'-.--', 'Z':'--..', '1':'.----', '2':'..---', '3':'...--', '4':'....-', '5':'.....', '6':'-....', '7':'--...', '8':'---..', '9':'----.', '0':'-----', ' ':' / ' };
+                 let morseResult = '';
+                 for (let char of text) {
+                      morseResult += (morseCodeMap[char] || '') + ' '; // Add space between letters
+                 }
+                 output.value = morseResult.trim();
+             }
+         }
+
+         // Close modal on Escape key
+         window.addEventListener('keydown', (event) => {
+             if (event.key === 'Escape' && activeModal) {
+                 closeActiveModal();
+             }
+         });
+
+    </script>
+
+</body>
+</html>
