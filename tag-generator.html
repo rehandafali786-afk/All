@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tag Generator Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tag Generator Tool</h1>
+    <label for="tagInput">Enter tag name:</label>
+    <input type="text" id="tagInput" placeholder="e.g. 'div', 'span', etc."><br>
+    <button onclick="generateTag()">Generate Tag</button>
+    <h2>Generated Tag:</h2>
+    <pre id="generatedTag"></pre>
+    <script>
+        function generateTag() {
+            const tagInput = document.getElementById('tagInput').value.trim();
+            const generatedTag = tagInput ? `<${tagInput}></${tagInput}>` : 'Please enter a valid tag.';
+            document.getElementById('generatedTag').innerText = generatedTag;
+        }
+    </script>
+</body>
+</html>
